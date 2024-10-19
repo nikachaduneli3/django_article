@@ -1,0 +1,10 @@
+{% for post in posts%}
+    {{post.name}}
+    <br/>
+{%endfor%}
+
+<form method='get' action="">
+    {{form.as_p}}
+<button type="submit">submit</button>
+</form>
+

@@ -1,15 +1,23 @@
-name: {{ post.name }}
-<br>
-content: {{ post.content }}
-<br>
-author: {{ post.author }}
-<br>
-create date: {{ post.create_date }}
-<br>
-like_count: {{ post.like_count }}
+{% extends 'base.html' %}
 
-<br>
-<a href="{% url 'update-post' post.id %}"> udpate</a>
-<br>
+{% block content %}
+    <p>name: {{ post.name }}</p>
+    <p>content: {{ post.content }}</p>
+    <p>author: {{ post.author }}</p>
+    <p>create date: {{ post.create_date }}</p>
+    <p>like_count: {{ post.like_count }}</p>
 
-<a href="{% url 'home' %}"> go back</a>
+    <h3> Comments:</h3>
+    {% for comment in post.comments.all %}
+        <p>{{comment.content}}</p>
+    {% endfor %}
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form }}
+        <button type="submit">submit</button>
+    </form>
+    <a href="{% url 'update-post' post.id %}"> udpate</a>
+    <br>
+    <a href="{% url 'home' %}"> go back</a>
+{% endblock%}

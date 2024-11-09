@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Post
-from .forms import PostForm
+from .models import Post, Comment
+from .forms import PostForm, CommentForm
 
 
 def home(request):
@@ -12,7 +12,15 @@ def home(request):
 
 def detail_post(request, pk):
     post = get_object_or_404(Post, pk=pk) # pk(id) -ით ბაზიდან პოსტის წამოღება
-    return render(request, 'detail_post.html', context={'post': post})
+
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.save()
+            return redirect('detail-post', pk=pk)
+    return render(request, 'detail_post.html', context={'post': post, 'form': CommentForm()})
 
 
 def create_post(request):
